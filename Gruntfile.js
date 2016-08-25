@@ -3,6 +3,17 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        // define a string to put between each file in the concatenated output
+        separator: ';'
+      },
+      dist: {
+        // the files to concatenate
+        src: ['public/client/**/*.js',
+              'public/lib/**/*.js'],
+        // the location of the resulting JS file
+        dest: 'concat.js'
+      }
     },
 
     mochaTest: {
@@ -21,11 +32,21 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+          // the banner is inserted at the top of the output
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+      },
+      dist: {
+        files: {
+          'uglify.min.js': ['<%= concat.dist.dest %>']
+        }
+      }
     },
 
     eslint: {
-      target: [
-        // Add list of files to lint here
+      src: ['app/**/*.js',
+            'db/**/*.js',
+            'lib/**/*.js'
       ]
     },
 
@@ -85,6 +106,22 @@ module.exports = function(grunt) {
 
   grunt.registerTask('push', [
     'shell:prodServer:command'
+  ]);
+
+  grunt.registerTask('cat', [
+    'concat'
+  ]);
+
+  grunt.registerTask('ugggly', [
+    'uglify'
+  ]);
+
+  grunt.registerTask('watcher', [
+    'watch'  
+  ]);
+
+  grunt.registerTask('linter', [
+    'eslint'  
   ]);
 
 
