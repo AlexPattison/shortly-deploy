@@ -51,6 +51,10 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: [
+          'cd ~/Desktop/shortly-deploy',
+          'git push live master'
+        ].join('&&')
       }
     },
   });
@@ -79,8 +83,16 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
   ]);
 
+  grunt.registerTask('push', [
+    'shell:prodServer:command'
+  ]);
+
+
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
+
+      
+
       // add your production server task here
     } else {
       grunt.task.run([ 'server-dev' ]);
